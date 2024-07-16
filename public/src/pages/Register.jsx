@@ -50,7 +50,6 @@ function Register() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (handleValidation()) {
-            console.log("Post request ready to send!");
             const { username, email, password } = values;
             const { data } = await axios.post(registerRoute, {
                 username,
@@ -58,11 +57,9 @@ function Register() {
                 password
             });
             if (data.status === false) {
-                console.log("Post request has errors")
                 toast.error(data.msg, toastOptions);
             }
             if (data.status === true) {
-                console.log("Post request success!")
                 localStorage.setItem("whisper-pal-user", JSON.stringify(data.user));
                 navigate("/");
             }
