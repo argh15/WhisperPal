@@ -25,6 +25,11 @@ function Register() {
         confirmPassword: ""
     });
 
+    useEffect(() => {
+        if(localStorage.getItem('whisper-pal-user'))
+            navigate("/");
+    }, [])
+
     const handleChange = (event) => {
         setValues({ ...values, [event.target.name]: event.target.value });
     };
@@ -60,7 +65,7 @@ function Register() {
                 toast.error(data.msg, toastOptions);
             }
             if (data.status === true) {
-                localStorage.setItem("whisper-pal-user", JSON.stringify(data.user));
+                localStorage.setItem('whisper-pal-user', JSON.stringify(data.user));
                 navigate("/");
             }
         }
@@ -124,9 +129,7 @@ const FormContainer = styled.div`
         }
         h1 {
             color: white;
-            text-transform: uppercase;
         }
-
     }
     form {
         display: flex;
