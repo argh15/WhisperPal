@@ -1,21 +1,80 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import Logo from '../assets/logo.svg'
+import Logo from '../assets/logo.svg';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
+import { registerRoute } from '../utils/APIRoutes';
 
 function Register() {
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        alert("form!");
+    const navigate = useNavigate();
+
+    const toastOptions = {
+        position: 'bottom-right',
+        autoClose: 5000,
+        pauseOnHover: true,
+        draggable: true,
+        theme: 'dark'
     };
 
-    const handleChange = (event) => {};
+    const [values, setValues] = useState({
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: ""
+    });
+
+    const handleChange = (event) => {
+        setValues({ ...values, [event.target.name]: event.target.value });
+    };
+
+    const handleValidation = () => {
+        const { username, email, password, confirmPassword } = values;
+        if (username.length < 3) {
+            toast.error('Username should be at least of 3 characters!', toastOptions);
+            return false;
+        } else if (email === "") {
+            toast.error('Email is required!', toastOptions);
+            return false;
+        } else if (password.length < 8) {
+            toast.error('Password should be at least of 8 characters!', toastOptions);
+            return false;
+        } else if (password !== confirmPassword) {
+            toast.error('Password & Confirm Password should be same!', toastOptions);
+            return false;
+        }
+        return true;
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        if (handleValidation()) {
+            console.log("Post request ready to send!");
+            const { username, email, password } = values;
+            const { data } = await axios.post(registerRoute, {
+                username,
+                email,
+                password
+            });
+            if (data.status === false) {
+                console.log("Post request has errors")
+                toast.error(data.msg, toastOptions);
+            }
+            if (data.status === true) {
+                console.log("Post request success!")
+                localStorage.setItem("whisper-pal-user", JSON.stringify(data.user));
+                navigate("/");
+            }
+        }
+    };
+
     return (
         <>
             <FormContainer>
                 <form onSubmit={(event) => handleSubmit(event)}>
                     <div className="brand">
-                        <img src= {Logo} alt="Logo" />
+                        <img src={Logo} alt="Logo" />
                         <h1>Whisper Pal</h1>
                     </div>
                     <input
@@ -44,6 +103,7 @@ function Register() {
                     </span>
                 </form>
             </FormContainer>
+            <ToastContainer />
         </>
     )
 }
