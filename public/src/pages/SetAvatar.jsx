@@ -26,7 +26,7 @@ function SetAvatar() {
     };
 
     useEffect(() => {
-        if(!localStorage.getItem('whisper-pal-user'))
+        if (!localStorage.getItem('whisper-pal-user'))
             navigate("/login");
     }, [navigate])
 
@@ -86,6 +86,7 @@ function SetAvatar() {
                         {avatars.map((avatar, index) => {
                             return (
                                 <div
+                                    key={index}
                                     className={`avatar ${selectedAvatar === index ? "selected" : ""
                                         }`}
                                 >
