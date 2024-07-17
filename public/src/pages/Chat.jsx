@@ -5,6 +5,7 @@ import Contacts from '../components/Contacts';
 import axios from 'axios';
 import { allUsersRoute } from '../utils/APIRoutes';
 import Welcome from '../components/Welcome';
+import ChatContainer from '../components/ChatContainer';
 
 function Chat() {
 
@@ -12,6 +13,7 @@ function Chat() {
   const [contacts, setContacts] = useState([]);
   const [currentUser, setCurrentUser] = useState(undefined);
   const [currentChat, setCurrentChat] = useState(undefined);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     async function setUserSession() {
@@ -23,6 +25,7 @@ function Chat() {
             localStorage.getItem('whisper-pal-user')
           )
         );
+        setIsLoaded(true);
       }
     }
     setUserSession();
@@ -52,7 +55,10 @@ function Chat() {
       <Container>
         <div className="container">
           <Contacts contacts={contacts} currentUser={currentUser} changeChat={handleChatChange} />
-          <Welcome currentUser={currentUser}></Welcome>
+          {isLoaded && currentChat === undefined ? (
+            <Welcome currentUser={currentUser}></Welcome>) : (
+            <ChatContainer currentChat={currentChat}></ChatContainer>
+          )}
         </div>
       </Container>
     </>
