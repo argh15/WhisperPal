@@ -20,13 +20,13 @@ function Login() {
 
     const [values, setValues] = useState({
         username: "",
-        password: ""    
+        password: ""
     });
 
     useEffect(() => {
-      if(localStorage.getItem('whisper-pal-user'))
-          navigate("/");
-  }, [])
+        if (localStorage.getItem('whisper-pal-user'))
+            navigate("/");
+    }, [navigate])
 
     const handleChange = (event) => {
         setValues({ ...values, [event.target.name]: event.target.value });
@@ -38,8 +38,8 @@ function Login() {
             toast.error('Username or Password can\'t be blank!', toastOptions);
             return false;
         } else if (password === "") {
-          toast.error('Username or Password can\'t be blank!', toastOptions);
-          return false;
+            toast.error('Username or Password can\'t be blank!', toastOptions);
+            return false;
         }
         return true;
     };

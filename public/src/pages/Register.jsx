@@ -28,7 +28,7 @@ function Register() {
     useEffect(() => {
         if(localStorage.getItem('whisper-pal-user'))
             navigate("/");
-    }, [])
+    }, [navigate])
 
     const handleChange = (event) => {
         setValues({ ...values, [event.target.name]: event.target.value });
